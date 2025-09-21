@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+env:
+  CTEST_TIMEOUT: 120
+  CLANG_VERSION: "20"
+
+jobs:
+  build-and-test:
+    name: Build & Test (${{ matrix.os }}, C++${{ matrix.cxx_standard }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+        cxx_standard: [17, 20]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Setup Clang
+        uses: ./.github/actions/setup-clang
+        with:
+          clang-version: ${{ env.CLANG_VERSION }}
+
+      - name: Build
+        run: |
+          CMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} \
+          CMAKE_C_COMPILER=clang-${{ env.CLANG_VERSION }} \
+          CMAKE_CXX_COMPILER=clang++-${{ env.CLANG_VERSION }} \
+          make debug
+
+      - name: Run tests
+        run: |
+          cd ${{github.workspace}}/build
+          xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" ctest --output-on-failure --verbose --timeout ${{ env.CTEST_TIMEOUT }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-cpp${{ matrix.cxx_standard }}
+          path: |
+            ${{github.workspace}}/build/Testing/
+            ${{github.workspace}}/build/test/
+
+  sanitizer-analysis:
+    name: Sanitizer Analysis (${{ matrix.sanitizer }})
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [asan, tsan]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Setup Clang
+        uses: ./.github/actions/setup-clang
+        with:
+          clang-version: ${{ env.CLANG_VERSION }}
+
+      - name: Build with sanitizer
+        run: |
+          CMAKE_C_COMPILER=clang-${{ env.CLANG_VERSION }} \
+          CMAKE_CXX_COMPILER=clang++-${{ env.CLANG_VERSION }} \
+          make ${{ matrix.sanitizer }}
+
+      - name: Run tests with sanitizer
+        run: |
+          build_dir="build-${{ matrix.sanitizer }}"
+          cd $build_dir
+          # Set sanitizer options
+          if [ "${{ matrix.sanitizer }}" = "asan" ]; then
+            export ASAN_OPTIONS="detect_leaks=1:abort_on_error=1"
+          elif [ "${{ matrix.sanitizer }}" = "tsan" ]; then
+            export TSAN_OPTIONS="abort_on_error=1"
+          fi
+          xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" ctest --output-on-failure --verbose --timeout ${{ env.CTEST_TIMEOUT }}
+
+      - name: Upload sanitizer results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanitizer-results-${{ matrix.sanitizer }}
+          path: |
+            build-${{ matrix.sanitizer }}/Testing/
+            build-${{ matrix.sanitizer }}/test/
+
+  coverage-analysis:
+    name: Coverage Analysis
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Generate coverage report
+        run: |
+          xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" make coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./build-coverage/coverage_filtered.info
+          fail_ci_if_error: true
+
+      - name: Upload HTML coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            build-coverage/coverage_filtered.info
+            coverage/

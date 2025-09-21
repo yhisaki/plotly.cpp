@@ -1,0 +1,32 @@
+name: "Install System Dependencies"
+description: "Install common system dependencies for plotly.cpp builds"
+
+inputs:
+  extra-packages:
+    description: "Additional packages to install (space-separated)"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install base dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          cmake \
+          pkg-config \
+          nlohmann-json3-dev \
+          libgtest-dev \
+          libgoogle-glog-dev \
+          libunwind-dev \
+          libboost-dev \
+          libboost-system-dev
+
+    - name: Install extra packages
+      if: inputs.extra-packages != ''
+      shell: bash
+      run: |
+        sudo apt-get install -y ${{ inputs.extra-packages }}

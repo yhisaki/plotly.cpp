@@ -1,0 +1,26 @@
+name: "Setup Clang"
+description: "Install and configure Clang compiler"
+
+inputs:
+  clang-version:
+    description: "Clang version to install (20, 21)"
+    required: false
+    default: "20"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install and setup clang
+      shell: bash
+      run: |
+        # Determine Ubuntu codename
+        UBUNTU_CODENAME=$(lsb_release -cs)
+
+        # Add LLVM repository key
+        wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm.asc
+
+        # Install specific clang version
+        CLANG_VERSION="${{ inputs.clang-version }}"
+        echo "deb http://apt.llvm.org/${UBUNTU_CODENAME}/ llvm-toolchain-${UBUNTU_CODENAME}-${CLANG_VERSION} main" | sudo tee /etc/apt/sources.list.d/llvm.list
+        sudo apt-get update
+        sudo apt-get install -y clang-${CLANG_VERSION} clang-format-${CLANG_VERSION} clang-tidy-${CLANG_VERSION}

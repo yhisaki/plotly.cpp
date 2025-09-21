@@ -1,0 +1,152 @@
+
+#include "plotly/plotly.hpp"
+#include "utils/arg_parser.hpp"
+#include <cstddef>
+#include <random>
+#include <string>
+#include <vector>
+
+auto main(int argc, char *argv[]) -> int {
+  // Parse command line arguments
+  auto args = parseGalleryArgs(argc, argv);
+
+  plotly::Figure fig;
+  fig.openBrowser(args.headless);
+
+  // Generate sample data for different groups
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  const int sampleSize = 200;
+  std::vector<std::string> groups = {"Control", "Treatment A", "Treatment B",
+                                     "Treatment C"};
+
+  std::vector<plotly::Object> boxTraces, violinTraces;
+
+  for (size_t i = 0; i < groups.size(); i++) {
+    std::vector<double> data;
+    data.reserve(sampleSize);
+
+    // Generate different distributions for each group
+    if (i == 0) {
+      // Control: Normal distribution
+      std::normal_distribution<double> dist(50.0, 10.0);
+      for (int j = 0; j < sampleSize; j++) {
+        data.push_back(dist(gen));
+      }
+    } else if (i == 1) {
+      // Treatment A: Slightly shifted normal
+      std::normal_distribution<double> dist(55.0, 8.0);
+      for (int j = 0; j < sampleSize; j++) {
+        data.push_back(dist(gen));
+      }
+    } else if (i == 2) {
+      // Treatment B: Bimodal distribution
+      std::normal_distribution<double> dist1(45.0, 5.0);
+      std::normal_distribution<double> dist2(65.0, 5.0);
+      std::bernoulli_distribution chooseDist(0.6);
+      for (int j = 0; j < sampleSize; j++) {
+        if (chooseDist(gen)) {
+          data.push_back(dist1(gen));
+        } else {
+          data.push_back(dist2(gen));
+        }
+      }
+    } else {
+      // Treatment C: Skewed distribution
+      std::gamma_distribution<double> dist(2.0, 15.0);
+      for (int j = 0; j < sampleSize; j++) {
+        data.push_back(dist(gen) + 30.0);
+      }
+    }
+
+    // Create box plot trace
+    plotly::Object boxTrace = {
+        {"type", "box"},
+        {"y", data},
+        {"name", groups[i]},
+        {"x", std::vector<std::string>(data.size(), groups[i])},
+        {"boxpoints", "outliers"},
+        {"marker", {{"color", "blue"}}},
+        {"line", {{"color", "darkblue"}}},
+        {"xaxis", "x"},
+        {"offsetgroup", i}};
+
+    // Create violin plot trace
+    plotly::Object violinTrace = {
+        {"type", "violin"},
+        {"y", data},
+        {"name", groups[i] + " (Violin)"},
+        {"x", std::vector<std::string>(data.size(), groups[i])},
+        {"side", "positive"},
+        {"line", {{"color", "red"}}},
+        {"fillcolor", "rgba(255,0,0,0.3)"},
+        {"meanline", {{"visible", true}}},
+        {"points", false},
+        {"xaxis", "x2"},
+        {"offsetgroup", i},
+        {"showlegend", true}};
+
+    boxTraces.push_back(boxTrace);
+    violinTraces.push_back(violinTrace);
+  }
+
+  // Combine all traces
+  std::vector<plotly::Object> allTraces;
+  allTraces.reserve(boxTraces.size());
+  for (const auto &trace : boxTraces) {
+    allTraces.push_back(trace);
+  }
+  for (const auto &trace : violinTraces) {
+    allTraces.push_back(trace);
+  }
+
+  // Create layout with subplot structure
+  plotly::Object layout = {
+      {"title",
+       {{"text",
+         "Statistical Distribution Comparison: Box Plots vs Violin Plots"},
+        {"font", {{"size", 16}}}}},
+      {"xaxis",
+       {{"title", "Box Plots"}, {"domain", {0.0, 0.45}}, {"showgrid", true}}},
+      {"xaxis2",
+       {{"title", "Violin Plots"},
+        {"domain", {0.55, 1.0}},
+        {"showgrid", true}}},
+      {"yaxis", {{"title", "Response Value"}, {"showgrid", true}}},
+      {"width", 1000},
+      {"height", 600},
+      {"showlegend", true},
+      {"legend", {{"x", 1.02}, {"y", 1.0}}},
+      {"annotations",
+       {{{"text", "Box Plots show quartiles and outliers"},
+         {"x", 0.225},
+         {"y", -0.15},
+         {"xref", "paper"},
+         {"yref", "paper"},
+         {"showarrow", false},
+         {"font", {{"size", 12}}}},
+        {{"text", "Violin Plots show full distribution shape"},
+         {"x", 0.775},
+         {"y", -0.15},
+         {"xref", "paper"},
+         {"yref", "paper"},
+         {"showarrow", false},
+         {"font", {{"size", 12}}}}}}};
+
+  // Create the plot
+  fig.newPlot(allTraces, layout);
+
+  if (!args.headless) {
+    fig.waitClose();
+  } else {
+    // Save image instead of opening browser
+    plotly::Object imageOpts = {{"format", "png"},
+                                {"width", 1000},
+                                {"height", 600},
+                                {"filename", "box_violin_plots"}};
+    fig.downloadImage(imageOpts);
+  }
+
+  return 0;
+}

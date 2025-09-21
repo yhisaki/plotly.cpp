@@ -1,0 +1,33 @@
+#pragma once
+
+// clang-format off
+#define PLOTLY_CPP_VERSION_MAJOR @plotly-cpp_VERSION_MAJOR@
+#define PLOTLY_CPP_VERSION_MINOR @plotly-cpp_VERSION_MINOR@
+#define PLOTLY_CPP_VERSION_PATCH @plotly-cpp_VERSION_PATCH@
+#define PLOTLY_CPP_VERSION "@plotly-cpp_VERSION@"
+// clang-format on
+namespace plotly {
+/**
+ * @brief Get the library version string
+ * @return Version string in format "MAJOR.MINOR.PATCH"
+ */
+inline auto version() -> const char * { return PLOTLY_CPP_VERSION; }
+
+/**
+ * @brief Get the major version number
+ * @return Major version number
+ */
+inline auto versionMajor() -> int { return PLOTLY_CPP_VERSION_MAJOR; }
+
+/**
+ * @brief Get the minor version number
+ * @return Minor version number
+ */
+inline auto versionMinor() -> int { return PLOTLY_CPP_VERSION_MINOR; }
+
+/**
+ * @brief Get the patch version number
+ * @return Patch version number
+ */
+inline auto versionPatch() -> int { return PLOTLY_CPP_VERSION_PATCH; }
+} // namespace plotly
