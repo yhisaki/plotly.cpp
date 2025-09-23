@@ -94,14 +94,14 @@ Similar data structures, same parameters, and similar behavior with C++ syntax.
 
 ### Installation
 
-### Install from deb package (Recommended)
+#### Install from deb package (Recommended)
 
 ```bash
 wget https://github.com/yhisaki/plotly.cpp/releases/download/v0.1.0/libplotly-cpp-0.1.0-Linux.deb
 sudo apt install ./libplotly-cpp-0.1.0-Linux.deb
 ```
 
-#### Basic Installation with FetchContent
+#### Install from FetchContent
 
 Add to your CMake project using FetchContent:
 
@@ -115,6 +115,14 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(plotly-cpp)
+```
+
+#### Usage
+
+After installation, add the following to your `CMakeLists.txt`:
+
+```cmake
+find_package(plotly-cpp REQUIRED)
 
 target_link_libraries(your_target plotly-cpp::plotly-cpp)
 ```
