@@ -54,7 +54,7 @@ endif()
 set(CPACK_SOURCE_IGNORE_FILES
     "/\\\\.git/"
     "/\\\\.github/"
-    "/assets/"
+    "/docs/images/"
     "/test/"
     "/gallery/"
     "/build/"

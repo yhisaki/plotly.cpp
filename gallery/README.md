@@ -10,7 +10,7 @@ This gallery showcases various visualization examples using plotly.cpp, demonstr
 
 A simple scatter plot to get started with plotly.cpp.
 
-![hello-world](/assets/hello-world.png)
+![hello-world](/docs/images/hello-world.png)
 
 ### Sin Curve
 
@@ -18,7 +18,7 @@ A simple scatter plot to get started with plotly.cpp.
 
 This example shows how to plot a sin curve.
 
-![sin-curve](/assets/sin_curve.png)
+![sin-curve](/docs/images/sin_curve.png)
 
 ### 2x2 Subplots
 
@@ -26,7 +26,7 @@ This example shows how to plot a sin curve.
 
 Demonstrates creating multiple subplots in a 2x2 grid layout.
 
-![2x2 Subplots](/assets/2x2_subplots.png)
+![2x2 Subplots](/docs/images/2x2_subplots.png)
 
 ### Multi-trace Styling
 
@@ -34,7 +34,7 @@ Demonstrates creating multiple subplots in a 2x2 grid layout.
 
 Shows how to style multiple traces with different colors and markers.
 
-![multi-trace-styling](/assets/multi_trace_styling.png)
+![multi-trace-styling](/docs/images/multi_trace_styling.png)
 
 ## Statistical Charts
 
@@ -44,7 +44,7 @@ Shows how to style multiple traces with different colors and markers.
 
 Statistical distribution comparison using box plots and violin plots side by side.
 
-![box-violin-plots](/assets/box_violin_plots.png)
+![box-violin-plots](/docs/images/box_violin_plots.png)
 
 ### Statistical Distributions
 
@@ -52,7 +52,7 @@ Statistical distribution comparison using box plots and violin plots side by sid
 
 Visualization of various statistical distributions and probability density functions.
 
-![statistical-distributions](/assets/statistical_distributions.png)
+![statistical-distributions](/docs/images/statistical_distributions.png)
 
 ### Scatter Bubble Chart
 
@@ -60,7 +60,7 @@ Visualization of various statistical distributions and probability density funct
 
 Multi-dimensional scatter plot with bubble sizes representing additional data dimensions.
 
-![scatter-bubble-chart](/assets/scatter_bubble_chart.png)
+![scatter-bubble-chart](/docs/images/scatter_bubble_chart.png)
 
 ## 3D Visualizations
 
@@ -70,7 +70,7 @@ Multi-dimensional scatter plot with bubble sizes representing additional data di
 
 Basic 3D surface plotting example for getting started with 3D visualizations.
 
-![3d_surface](/assets/3d_surface.gif)
+![3d_surface](/docs/images/3d_surface.gif)
 
 ## Specialized Charts
 
@@ -80,7 +80,7 @@ Basic 3D surface plotting example for getting started with 3D visualizations.
 
 Business metrics correlation matrix displayed as an interactive heatmap.
 
-![heatmap-correlation](/assets/heatmap_correlation.png)
+![heatmap-correlation](/docs/images/heatmap_correlation.png)
 
 ### Polar Radar Chart
 
@@ -88,7 +88,7 @@ Business metrics correlation matrix displayed as an interactive heatmap.
 
 Multi-dimensional radar chart comparing product performance across different metrics.
 
-![polar-radar-chart](/assets/polar_radar_chart.png)
+![polar-radar-chart](/docs/images/polar_radar_chart.png)
 
 ### Financial Candlestick
 
@@ -96,7 +96,7 @@ Multi-dimensional radar chart comparing product performance across different met
 
 Stock price visualization using candlestick charts with volume data.
 
-![financial-candlestick](/assets/financial_candlestick.png)
+![financial-candlestick](/docs/images/financial_candlestick.png)
 
 ### Parallel Coordinates
 
@@ -104,7 +104,7 @@ Stock price visualization using candlestick charts with volume data.
 
 Multi-dimensional data visualization using parallel coordinate plots.
 
-![parallel-coordinates](/assets/parallel_coordinates.png)
+![parallel-coordinates](/docs/images/parallel_coordinates.png)
 
 ## Hierarchical and Flow Charts
 
@@ -114,7 +114,7 @@ Multi-dimensional data visualization using parallel coordinate plots.
 
 Hierarchical data visualization using treemap charts.
 
-![treemap-hierarchy](/assets/treemap_hierarchy.png)
+![treemap-hierarchy](/docs/images/treemap_hierarchy.png)
 
 ### Sankey Flow Diagram
 
@@ -122,7 +122,7 @@ Hierarchical data visualization using treemap charts.
 
 Flow diagram showing relationships and quantities between different nodes.
 
-![sankey-flow-diagram](/assets/sankey_flow_diagram.png)
+![sankey-flow-diagram](/docs/images/sankey_flow_diagram.png)
 
 ## Geographic Visualizations
 
@@ -132,7 +132,7 @@ Flow diagram showing relationships and quantities between different nodes.
 
 Geographic data visualization using choropleth maps.
 
-![geographic-choropleth](/assets/geographic_choropleth.png)
+![geographic-choropleth](/docs/images/geographic_choropleth.png)
 
 ## Real-time and Streaming
 
@@ -142,7 +142,7 @@ Geographic data visualization using choropleth maps.
 
 Basic example of streaming data visualization.
 
-![streaming_data](/assets/streaming_data.gif)
+![streaming_data](/docs/images/streaming_data.gif)
 
 ## Animations
 
@@ -152,7 +152,7 @@ Basic example of streaming data visualization.
 
 Smooth animation of a sine wave with phase shifts using Plotly's animation framework.
 
-![animate_sin_wave](/assets/animate_sin_wave.gif)
+![animate_sin_wave](/docs/images/animate_sin_wave.gif)
 
 ### Clustering Animation
 
@@ -160,7 +160,7 @@ Smooth animation of a sine wave with phase shifts using Plotly's animation frame
 
 K-means clustering algorithm visualization showing convergence in real-time.
 
-![clustering_animation](/assets/clustering_animation.gif)
+![clustering_animation](/docs/images/clustering_animation.gif)
 
 ## Physics Simulations
 
@@ -170,7 +170,7 @@ K-means clustering algorithm visualization showing convergence in real-time.
 
 Chaotic double pendulum simulation with real-time physics integration using RK4.
 
-![double_pendulum](/assets/double_pendulum.gif)
+![double_pendulum](/docs/images/double_pendulum.gif)
 
 ### Duffing Oscillator
 
@@ -178,7 +178,7 @@ Chaotic double pendulum simulation with real-time physics integration using RK4.
 
 Multiple Duffing oscillators with random initial conditions showing phase space evolution.
 
-![duffing](/assets/duffing.gif)
+![duffing](/docs/images/duffing.gif)
 
 ### Particle Physics Simulation
 
@@ -186,7 +186,7 @@ Multiple Duffing oscillators with random initial conditions showing phase space 
 
 N-body particle physics simulation with gravitational or electromagnetic forces.
 
-![particle_physics_sim](/assets/particle_physics_sim.gif)
+![particle_physics_sim](/docs/images/particle_physics_sim.gif)
 
 ## Mathematical Visualizations
 
@@ -196,8 +196,8 @@ N-body particle physics simulation with gravitational or electromagnetic forces.
 
 Interactive Mandelbrot and Julia set fractals with switchable views.
 
-![fractal_mandelbrot](/assets/fractal_mandelbrot.png)
-![fractal_julia](/assets/fractal_julia.png)
+![fractal_mandelbrot](/docs/images/fractal_mandelbrot.png)
+![fractal_julia](/docs/images/fractal_julia.png)
 
 ### Golden Ratio
 
@@ -205,7 +205,7 @@ Interactive Mandelbrot and Julia set fractals with switchable views.
 
 Visualization of the golden ratio and Fibonacci spiral.
 
-![golden-ratio](/assets/golden_ratio.png)
+![golden-ratio](/docs/images/golden_ratio.png)
 
 ### Star Pattern
 
@@ -213,7 +213,7 @@ Visualization of the golden ratio and Fibonacci spiral.
 
 Mathematical star patterns and geometric visualizations.
 
-![star](/assets/star.png)
+![star](/docs/images/star.png)
 
 ## Cellular Automata
 
@@ -223,7 +223,7 @@ Mathematical star patterns and geometric visualizations.
 
 Conway's Game of Life cellular automaton with gliders, oscillators, and random patterns.
 
-![game_of_life](/assets/game_of_life.gif)
+![game_of_life](/docs/images/game_of_life.gif)
 
 ## Interactive Features
 
@@ -233,4 +233,4 @@ Conway's Game of Life cellular automaton with gliders, oscillators, and random p
 
 Basic event handling example for getting and setting annotations.
 
-![event_handling](/assets/event_handling.gif)
+![event_handling](/docs/images/event_handling.gif)
