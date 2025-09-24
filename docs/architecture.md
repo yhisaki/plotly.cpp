@@ -2,7 +2,7 @@
 
 ## System Architecture
 
-**Plotly.cpp** implements a sophisticated client-server architecture that bridges C++ applications with web-based visualization capabilities through Plotly.js. The system enables real-time, bidirectional communication between C++ code and a JavaScript frontend running in a web browser.
+**Plotly.cpp** implements a client-server architecture that bridges C++ applications with web-based visualization capabilities through Plotly.js. The system enables real-time, bidirectional communication between C++ code and a JavaScript frontend running in a web browser.
 
 ### Core Architecture Components
 
@@ -103,7 +103,7 @@ Callback [label="C++ Callback"];
 
 User => Plotly [label="User interaction\n(click, hover, zoom)"];
 Plotly => Events [label="Event triggered"];
-Events => Events [label="Sanitize event data"];
+Events => Events [label="Sanitize event data (Remove circular references)"];
 Events => Client [label="Prepare notification"];
 Events note Client [label="{\n\"jsonrpc\": \"2.0\",\n\"method\": \"event_callback_uuid\",\n\"params\": {\n  \"points\": [...],\n  \"event\": {...}\n}\n}"];
 Client => WS [label="Send notification"];
@@ -114,7 +114,7 @@ Callback => RPC [label="Handler execution"];
 
 ### HTTP Server for Static Assets
 
-A lightweight HTTP server serves the JavaScript frontend:
+An HTTP server serves the JavaScript frontend:
 
 - **Single-page application** with bundled Plotly.js
 - **WebSocket endpoint discovery** via `/ws_port` endpoint
@@ -125,7 +125,8 @@ A lightweight HTTP server serves the JavaScript frontend:
 
 ### C++ Backend Components
 
-#### `plotly::Figure` Class
+#### `plotly::Figure`
+It is implemented in `plotly::Figure` class in `src/plotly.cpp`.
 The main user-facing API that encapsulates:
 - **PIMPL idiom** for ABI stability
 - **WebSocket server management**
@@ -141,73 +142,82 @@ Key implementation files:
 - `src/detail/json_rpc.cpp` - JSON-RPC protocol implementation
 
 #### WebSocket Server
-Built on **websocketpp** library:
-- **Asynchronous I/O** using Boost.Asio
-- **Connection management** with automatic cleanup
-- **Message routing** to JSON-RPC handler
-- **Thread-safe** operation
+It is implemented in `plotly::detail::WebsocketServer` class in `src/detail/websockets_server.cpp`.
+Built on [**websocketpp**](https://github.com/zaphoyd/websocketpp) library with the following implementation:
+
+**Threading Architecture:**
+- **Service Thread**: Runs the Boost.Asio event loop (`_server.run()`) handling WebSocket I/O operations
+- **Callback Executor Thread**: Processes incoming messages and dispatches to registered callbacks (inherited from `WebsocketEndpointImpl`)
+
+**Connection Management:**
+- **Multiple Client Support**: Maintains active connections using `std::set<connection_hdl>` with WebSocket connection handles
+- **Dynamic Client Tracking**: Connections automatically added/removed via websocketpp handlers (`set_open_handler`/`set_close_handler`)
+- **Client Lifecycle Synchronization**: Provides `waitConnection()` and `waitUntilNoClient()` for coordinating with client connection states
+
+**Network Configuration:**
+- **Dynamic Port Allocation**: Uses promise/future pattern to communicate the actual bound port after server initialization
+- **TCP Optimization**: Disables Nagle algorithm for low-latency JSON-RPC communication
+- **Flexible Address Binding**: Supports both specific address binding and wildcard binding
+- **Socket Reuse**: Enables address reuse to prevent binding conflicts on restart
+
+**Message Broadcasting:**
+- **All-Client Broadcasting**: `send()` method delivers messages to all connected clients simultaneously
+- **Resilient Delivery**: Individual client send failures don't prevent delivery to other clients
+- **Text Frame Protocol**: Uses WebSocket text frames for JSON-RPC message transmission
 
 #### HTTP Server
+It is implemented in `plotly::detail::HttpServer` class in `src/detail/http_server.cpp`.
+Built on [**httplib**](https://github.com/yhirose/cpp-httplib) library with the following implementation:
 
-`HttpServer` is a class that provides a simple HTTP server for serving static files.
-Built on **httplib** library:
-- **Static file serving** from webapp directory
-- **Dynamic port allocation** to prevent conflicts
-- **WebSocket port endpoint** for client discovery
-- **Lifecycle management** tied to Figure lifetime
+**Dual Construction Modes:**
+- **Directory Serving Mode**: Uses `set_mount_point("/", directory)` to serve static files from filesystem
+- **Content Serving Mode**: Registers a single GET handler for "/" to serve HTML content directly from memory
+
+**Port Management:**
+- **Dynamic Port Binding**: Uses `bind_to_any_port("0.0.0.0")` to automatically allocate available ports
+- **Port Discovery**: Returns allocated port via `getPort()` for external components to connect
+- **All-Interface Binding**: Listens on "0.0.0.0" to accept connections from any network interface
+
+**WebSocket Integration:**
+- **Port Discovery Endpoint**: `/ws_port` endpoint returns JSON with WebSocket server port for client connection
+- **Page Load Confirmation**: `/loaded` endpoint allows frontend to signal successful initialization
+- **Connection Management**: Uses `setWebsocketPortRequestHandler()` to configure WebSocket port response
+
+**Threading Model:**
+- **Background Operation**: Server runs in dedicated thread (`_serverThread`) using `listen_after_bind()`
+- **Startup Synchronization**: Busy-waits using `is_running()` check to confirm server initialization
+- **HTTP Keep-Alive**: Configured with `set_keep_alive_max_count(1)` to limit persistent connections
 
 #### JSON-RPC Server
-Protocol implementation providing:
-- **Method registration** and dispatch
-- **Response correlation** using request IDs
-- **Error handling** with standard error codes
-- **Notification support** for events
+It is implemented in `plotly::detail::JsonRpc` class in `src/detail/json_rpc.cpp`.
+Built as a complete JSON-RPC 2.0 implementation with the following architecture:
 
-### JavaScript Frontend Components
+**Protocol Compliance:**
+- **JSON-RPC 2.0 Standard**: Full compliance with specification including request/response/notification formats
+- **Standard Error Codes**: Implements predefined error codes (`PARSE_ERROR`, `INVALID_REQUEST`, `METHOD_NOT_FOUND`, etc.)
+- **Message Validation**: Validates required fields (`jsonrpc`, `method`) and handles malformed requests
 
-#### Entry Point (`index.js`)
-- **WebSocket URL discovery** via HTTP endpoint `/ws_port`
-- **DOM element binding** for plot container
-- **Client initialization** and connection establishment
+**Method Dispatch System:**
+- **Handler Registration**: Stores method handlers in `std::unordered_map<std::string, std::function<json(json)>>`
+- **Notification Handlers**: Separate handler map for notifications (no response required)
+- **Request Processing**: Parses incoming messages, validates format, and routes to appropriate handlers
+- **Exception Handling**: Catches handler exceptions and converts to JSON-RPC error responses
 
-#### JSON-RPC Client (`json-rpc-client.js`)
-Sophisticated WebSocket client with:
-- **Connection management** with automatic reconnection
-- **Request/response correlation** using promise-based API
-- **Error handling** with custom error types
-- **Method registration** for handling C++ calls
-- **Timeout handling** for long-running requests
+**Asynchronous Call Management:**
+- **Future-Based API**: `call()` method returns `std::future<nlohmann::json>` for asynchronous result handling
+- **Request ID Correlation**: Auto-incrementing request IDs to match responses with requests
+- **Unique Callback Names**: Uses UUID-generated callback names to handle concurrent requests
+- **Call Cancellation**: Provides cancellation function to abort pending requests
 
-Key features:
-```javascript
-class JsonRpcClient {
-  async call(method, params, timeoutMs)     // Call C++ methods
-  notify(method, params)                    // Send notifications to C++
-  registerHandler(method, handler)          // Handle C++ method calls
-  async connect()                           // Establish WebSocket connection
-}
-```
+**WebSocket Integration:**
+- **Endpoint Abstraction**: Takes `WebsocketEndpointInterface` for transport layer independence
+- **Callback Management**: Tracks registered WebSocket callbacks for proper cleanup
+- **Message Routing**: Routes all incoming WebSocket messages through JSON-RPC protocol handler
 
-#### Plotly.js Binding (`render-plotly.js`)
-Direct API mapping between JSON-RPC calls and Plotly.js:
-
-- **Method Handlers**: Each Plotly.js function has a corresponding JSON-RPC handler:
-  - `Plotly.newPlot` → `"Plotly.newPlot"` handler
-  - `Plotly.update` → `"Plotly.update"` handler
-  - `Plotly.extendTraces` → `"Plotly.extendTraces"` handler
-  - etc.
-
-- **Event Integration**: Bidirectional event handling:
-  ```javascript
-  client.registerHandler("Plotly.on", (params) => {
-    plotElement.on(params.event, (eventData) => {
-      const sanitizedEventData = removeUnderscoreProperties(eventData);
-      client.notify(params.eventId, sanitizedEventData);
-    });
-  });
-  ```
-
-- **Data Sanitization**: Removes circular references and internal properties before sending events to C++
+**Response Generation:**
+- **Success Responses**: Automatically formats results into JSON-RPC response objects
+- **Error Responses**: Generates compliant error responses with code, message, and optional data
+- **Notification Handling**: Processes notifications without generating responses
 
 ## Key Design Patterns
 
@@ -230,15 +240,8 @@ digraph APIMirroring {
 }
 \enddot
 
-### Real-time Data Streaming
-The `extendTraces()` method enables efficient real-time data updates:
-- **Incremental updates** without full re-rendering
-- **Automatic animation** of new data points
-- **Memory management** with configurable point limits
-- **High-frequency updates** suitable for live monitoring
-
 ### Event-Driven Architecture
-Bidirectional events enable rich interactivity:
+Bidirectional events enable interactivity:
 
 \msc
 User [label="User"],
@@ -254,7 +257,7 @@ App => Events [label="Trigger custom event"];
 Events => Plotly [label="Update visualization"];
 Plotly => User [label="Visual feedback"];
 
-Events note Events [label="Bidirectional event flow enables\nrich interactive applications"];
+Events note Events [label="Bidirectional event flow enables\ninteractive applications"];
 \endmsc
 
 ### Browser Integration
@@ -262,45 +265,4 @@ Automatic browser management simplifies deployment:
 - **Process spawning** with configurable Chrome/Chromium paths
 - **Headless mode** support for server environments
 - **Download directory** configuration via Chrome DevTools Protocol
-- **Clean shutdown** with proper process cleanup
-
-## Thread Safety and Concurrency
-
-### WebSocket Server
-- **Thread-safe** message handling using websocketpp's async model
-- **Connection state** managed with proper synchronization
-- **Message queuing** handled by underlying websocketpp implementation
-
-### HTTP Server
-- **Multi-threaded** request handling via httplib
-- **Stateless design** for static file serving
-- **Thread-safe** port allocation and lifecycle management
-
-### Figure API
-- **Single-threaded** client usage recommended
-- **Internal synchronization** for WebSocket and HTTP servers
-- **Async operations** return quickly without blocking
-
-## Error Handling
-
-### JSON-RPC Error Codes
-Standard JSON-RPC 2.0 error codes:
-- `-32700`: Parse error (invalid JSON)
-- `-32600`: Invalid request
-- `-32601`: Method not found
-- `-32602`: Invalid parameters
-- `-32603`: Internal error
-- `-32000`: Server error
-
-### Connection Management
-- **Automatic reconnection** with exponential backoff
-- **Timeout handling** for long-running requests
-- **Graceful degradation** when browser disconnects
-- **Resource cleanup** on connection loss
-
-### Browser Process Management
-- **Process monitoring** for browser crashes
-- **Port conflict resolution** through dynamic allocation
-- **Launch failure handling** with fallback options
-
-This architecture provides a robust, scalable foundation for creating interactive data visualizations in C++ applications while leveraging the full power of Plotly.js in the browser.
+- **Shutdown** with proper process cleanup
