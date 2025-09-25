@@ -1,4 +1,44 @@
 
+/**
+ * @file gallery_geographic_choropleth.cpp
+ * @brief Geographic Choropleth Map - World GDP Distribution Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_geographic_choropleth.cpp
+ *
+ * # Geographic Choropleth Map Example
+ *
+ * This example demonstrates creating professional geographic data
+ * visualizations using choropleth maps to show statistical data across
+ * countries. It visualizes world GDP per capita distribution using color-coded
+ * country regions with interactive hover information and detailed geographic
+ * styling.
+ *
+ * ## What You'll Learn
+ * - Creating choropleth maps for geographic data visualization
+ * - Working with ISO 3-letter country codes for location mapping
+ * - Implementing custom color scales for data representation
+ * - Configuring geographic projections and map styling
+ * - Adding interactive hover templates with detailed country information
+ * - Customizing map features (coastlines, oceans, lakes, rivers)
+ * - Professional map layout design with annotations
+ *
+ * ## Sample Output
+ * The example creates a comprehensive world map featuring:
+ * - World GDP per capita data for 40+ countries using ISO-3 codes
+ * - Purple-to-yellow color gradient representing economic data ranges
+ * - Natural Earth projection for aesthetically pleasing world view
+ * - Interactive hover showing country name, GDP value, and country code
+ * - Styled coastlines, oceans, and geographic features
+ * - Professional layout suitable for economic analysis presentations
+ *
+ * @image html geographic_choropleth.png "World GDP per Capita Choropleth Map"
+ *
+ * @see plotly::Object For choropleth trace configuration
+ * @see parseGalleryArgs() For command line argument handling
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <string>

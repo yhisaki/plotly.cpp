@@ -1,3 +1,37 @@
+/**
+ * @file gallery_event_handling.cpp
+ * @brief Interactive Event Handling - User Interaction with Plots
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_event_handling.cpp
+ *
+ * # Interactive Event Handling Example
+ *
+ * This example demonstrates how to handle user interactions with plots using
+ * Plotly.js event callbacks. The program responds to mouse hover and click
+ * events on plot elements in real-time.
+ *
+ * ## What You'll Learn
+ * - Event-driven programming with interactive plots
+ * - Handling plotly_hover and plotly_click events
+ * - Dynamic plot annotation based on user interactions
+ * - Bidirectional communication between C++ backend and browser
+ * - Real-time plot updates using relayout() function
+ *
+ * ## Sample Output
+ * The example creates an interactive scatter plot where:
+ * - Hovering over points displays "hover" annotation at the point location
+ * - Clicking on points displays "click" annotation and prints coordinates to
+ * console
+ * - Both interactions dynamically update the plot with blue text annotations
+ *
+ * @image html event_handling.gif "Interactive Event Handling Example"
+ *
+ * @see plotly::Figure::on() For event callback registration
+ * @see plotly::Figure::relayout() For dynamic layout updates
+ */
+
 #include "plotly/plotly.hpp"
 #include <iostream>
 #include <vector>

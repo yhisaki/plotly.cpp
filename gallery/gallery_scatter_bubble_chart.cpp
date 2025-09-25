@@ -1,4 +1,42 @@
 
+/**
+ * @file gallery_scatter_bubble_chart.cpp
+ * @brief World Development Indicators Multi-Dimensional Bubble Chart
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_scatter_bubble_chart.cpp
+ * This gallery example demonstrates creating a sophisticated bubble chart using
+ * Plotly.cpp to visualize world development indicators across multiple
+ * dimensions. It combines scatter plot positioning with bubble size and color
+ * to represent four different metrics simultaneously.
+ *
+ * Features demonstrated:
+ * - Multi-dimensional data visualization (GDP, Life Expectancy, Population,
+ * Happiness)
+ * - Bubble size mapping to represent population data
+ * - Color scale mapping to represent happiness scores
+ * - Regional grouping with separate traces for easy filtering
+ * - Logarithmic scale for GDP data to handle wide value ranges
+ * - Interactive hover templates with detailed country information
+ * - Viridis color scale with custom colorbar configuration
+ * - Synthetic data generation with realistic correlations
+ *
+ * Data dimensions visualized:
+ * - X-axis: GDP per Capita (logarithmic scale)
+ * - Y-axis: Life Expectancy in years
+ * - Bubble size: Population in millions
+ * - Bubble color: Happiness Score (0-10 scale)
+ * - Regional grouping: North America, Asia, Europe, South America, Oceania
+ *
+ * The visualization enables exploration of complex relationships between
+ * economic, social, and demographic indicators across different world regions.
+ *
+ * @image html scatter_bubble_chart.png "World Development Indicators Bubble
+ * Chart"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <algorithm>

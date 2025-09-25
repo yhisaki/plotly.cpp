@@ -1,4 +1,42 @@
 
+/**
+ * @file gallery_particle_physics_sim.cpp
+ * @brief Interactive Particle Physics Simulation with Real-Time Animation
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_particle_physics_sim.cpp
+ * This gallery example demonstrates an advanced real-time physics simulation
+ * using Plotly.cpp. It simulates charged particles with electromagnetic
+ * interactions, collision detection, and realistic physics behavior in a
+ * bounded environment.
+ *
+ * Features demonstrated:
+ * - Real-time particle physics simulation with Coulomb force calculations
+ * - Dynamic scatter plot animation using plot updates
+ * - Multi-threaded simulation loop with controlled frame rate
+ * - Interactive visualization with hover information showing particle
+ * properties
+ * - Particle size mapping to mass and color mapping to electric charge
+ * - Boundary collision detection with energy damping
+ * - Scientific color scale for charge visualization with colorbar
+ *
+ * Physics concepts implemented:
+ * - Coulomb's law for electromagnetic force calculation (F = k·q₁·q₂/r²)
+ * - Newton's laws of motion for particle dynamics (F = ma)
+ * - Energy damping for realistic particle behavior
+ * - Elastic collision with boundary walls
+ * - Multi-particle interaction system with N-body calculations
+ *
+ * The simulation creates a visually engaging demonstration of electrodynamics
+ * with particles that attract/repel based on their charges and exhibit
+ * realistic motion patterns within a confined space.
+ *
+ * @image html particle_physics_sim.gif "Interactive Particle Physics
+ * Simulation"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include <algorithm>
 #include <chrono>

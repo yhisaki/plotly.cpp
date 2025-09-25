@@ -1,3 +1,39 @@
+/**
+ * @file gallery_star.cpp
+ * @brief Geometric Star Shape Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_star.cpp
+ * This gallery example demonstrates creating custom geometric shapes using
+ * Plotly.cpp by generating coordinate points programmatically. It showcases
+ * the creation of a five-pointed star through mathematical coordinate
+ * calculation and path-based visualization.
+ *
+ * Features demonstrated:
+ * - Custom geometric shape generation using mathematical calculations
+ * - Polar coordinate conversion to Cartesian coordinates
+ * - Path closure for complete shape formation
+ * - Scatter plot with both lines and markers for shape definition
+ * - Equal axis scaling to maintain shape proportions
+ * - Custom styling with color differentiation for lines and markers
+ * - Helper function design for reusable shape generation
+ *
+ * Mathematical concepts:
+ * - Star geometry with alternating outer and inner radii
+ * - Angular positioning using multiples of π/5 (36-degree increments)
+ * - Polar-to-Cartesian coordinate transformation: \f$x = r·cos(θ)\f$, \f$y =
+ * r·sin(θ)\f$
+ * - Path completion by connecting back to the starting point
+ *
+ * The star shape is created with outer radius 1.0, inner radius 0.4, and
+ * centered at the origin, demonstrating precise geometric control through
+ * programmatic coordinate generation.
+ *
+ * @image html star.png "Five-Pointed Star Geometric Shape"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cmath>

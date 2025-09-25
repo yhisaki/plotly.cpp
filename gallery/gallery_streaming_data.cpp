@@ -1,4 +1,37 @@
 
+/**
+ * @file gallery_streaming_data.cpp
+ * @brief Real-Time Data Streaming and Animation
+ *
+ * This gallery example demonstrates real-time data streaming capabilities using
+ * Plotly.cpp's extendTraces functionality. It creates a live-updating sine wave
+ * that streams data points continuously, showcasing dynamic visualization
+ * techniques for time-series data.
+ *
+ * Features demonstrated:
+ * - Real-time data streaming using extendTraces API
+ * - Live plot animation with controlled frame rate
+ * - Rolling window data display with maximum point limits
+ * - Thread-safe plot updates in real-time loops
+ * - Continuous mathematical function generation (sine wave)
+ * - Browser connection monitoring for graceful termination
+ * - High-frequency data updates (20 Hz) for smooth animation
+ *
+ * Technical concepts:
+ * - Plotly.js extendTraces equivalent implementation in C++
+ * - Time-series data streaming with automatic old data removal
+ * - Multi-threaded visualization with controlled timing
+ * - Memory-efficient streaming with bounded data windows
+ * - Real-time mathematical function evaluation
+ *
+ * The streaming visualization creates a smooth animated sine wave that
+ * continuously scrolls across the screen, demonstrating the capability
+ * to handle live data feeds and sensor readings in real-time applications.
+ *
+ * @image html streaming_data.gif "Real-Time Streaming Data Animation"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include <chrono>
 #include <cmath>

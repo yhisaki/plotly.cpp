@@ -1,4 +1,36 @@
 
+/**
+ * @file gallery_parallel_coordinates.cpp
+ * @brief Parallel Coordinates Plot with Multi-Dimensional Data
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_parallel_coordinates.cpp
+ *
+ * This gallery example demonstrates creating a parallel coordinates plot using
+ * Plotly.cpp. Parallel coordinates are effective for visualizing
+ * multi-dimensional data by representing each data point as a line connecting
+ * values across multiple parallel axes.
+ *
+ * Features demonstrated:
+ * - Multi-dimensional data visualization using parallel coordinates
+ * - Custom dimension configuration with ranges and constraints
+ * - Interactive brushing and filtering capabilities
+ * - Custom tick values and labels for categorical data
+ * - Constraint ranges for data filtering on specific dimensions
+ * - Color coding of parallel lines for pattern identification
+ *
+ * The plot displays four dimensions (A, B, C, D) with different configurations:
+ * - Dimension A: Numeric range with constraint filtering
+ * - Dimension B: Custom tick positions for specific value highlighting
+ * - Dimension C: Custom text labels replacing numeric values
+ * - Dimension D: Standard numeric range without constraints
+ *
+ * @image html parallel_coordinates.png "Multi-Dimensional Parallel Coordinates
+ * Plot"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <vector>

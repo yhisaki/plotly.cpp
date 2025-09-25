@@ -1,4 +1,44 @@
 
+/**
+ * @file gallery_game_of_life.cpp
+ * @brief Conway's Game of Life - Cellular Automaton Simulation
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_game_of_life.cpp
+ *
+ * # Conway's Game of Life Simulation
+ *
+ * This example implements the famous Conway's Game of Life cellular automaton,
+ * demonstrating emergent complexity from simple rules. The simulation shows
+ * how patterns evolve over time, including gliders (moving patterns),
+ * oscillators (repeating patterns), and random cellular interactions.
+ *
+ * ## What You'll Learn
+ * - Implementing cellular automaton algorithms and Conway's rules
+ * - Real-time animation using restyle() and relayout() for live updates
+ * - Object-oriented design with the GameOfLife class
+ * - Pattern recognition in cellular automata (gliders, oscillators, still
+ * lifes)
+ * - Threading and timing control for smooth animation
+ * - Heatmap visualization of grid-based simulations
+ * - Population dynamics tracking and extinction detection
+ *
+ * ## Sample Output
+ * The example creates a dynamic cellular automaton featuring:
+ * - 50x50 grid with 200 generations of evolution
+ * - Initial patterns: gliders, oscillators, and random sparse cells
+ * - Real-time animation at 100ms intervals per generation
+ * - Population counter showing live cell count in title
+ * - Black/white color scheme (live/dead cells)
+ * - Automatic termination when population dies out
+ *
+ * @image html game_of_life.gif "Conway's Game of Life Animation"
+ *
+ * @see plotly::Figure::restyle() For real-time data updates
+ * @see std::this_thread::sleep_for() For animation timing control
+ */
+
 #include "plotly/plotly.hpp"
 #include <chrono>
 #include <iostream>

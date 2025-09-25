@@ -1,4 +1,51 @@
 
+/**
+ * @file gallery_clustering_animation.cpp
+ * @brief K-means Clustering Animation - Machine Learning Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_clustering_animation.cpp
+ *
+ * # K-means Clustering Animation
+ *
+ * This example demonstrates the K-means clustering algorithm through real-time
+ * animation, visualizing how the algorithm iteratively converges to optimal
+ * cluster assignments by alternating between assignment and centroid update
+ * steps.
+ *
+ * ## What You'll Learn
+ * - Implementing the complete K-means clustering algorithm with iterative
+ * convergence
+ * - Creating real-time animations that update plot elements dynamically during
+ * computation
+ * - Visualizing machine learning algorithm convergence through interactive
+ * plots
+ * - Managing multiple data traces (points and centroids) with different visual
+ * properties
+ * - Using color coding to represent cluster assignments and algorithm state
+ * - Applying mathematical distance calculations (Euclidean) for cluster
+ * assignment
+ * - Implementing convergence detection and algorithm termination conditions
+ *
+ * ## Sample Output
+ * The example creates an animated visualization of K-means clustering with:
+ * - 200 synthetic data points distributed across 4 natural clusters
+ * - 4 cluster centroids (marked with X symbols) that move during optimization
+ * - Real-time color updates showing point-to-cluster assignments
+ * - Convergence detection that stops animation when algorithm reaches optimum
+ * - Final visualization highlighting the discovered cluster structure
+ *
+ * The algorithm demonstrates the two-step process:
+ * 1. Assignment step: Points change color based on nearest centroid
+ * 2. Update step: Centroids move to cluster centers
+ *
+ * @image html clustering_animation.gif "K-means Clustering Animation Output"
+ *
+ * @see plotly::Figure For the main plotting interface
+ * @see plotly::Figure::restyle() For updating plot properties during animation
+ */
+
 #include "plotly/plotly.hpp"
 #include <chrono>
 #include <cmath>

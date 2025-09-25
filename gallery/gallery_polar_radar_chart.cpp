@@ -1,4 +1,42 @@
 
+/**
+ * @file gallery_polar_radar_chart.cpp
+ * @brief Multi-Product Performance Comparison Radar Chart
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_polar_radar_chart.cpp
+ * This gallery example demonstrates creating an interactive radar (spider)
+ chart
+ * using Plotly.cpp's polar coordinate system. It compares multiple products
+ across
+ * various performance dimensions, making it ideal for competitive analysis and
+ * multi-criteria decision making.
+ *
+ * Features demonstrated:
+ * - Polar coordinate system with radial and angular axis configuration
+ * - Multiple overlapping filled polygons for product comparison
+ * - Custom color scheme with transparency for overlapping areas
+ * - Interactive legend with product selection/deselection
+ * - Radial axis with custom range, tick intervals, and grid styling
+ * - Angular axis rotation and direction control
+ * - Detailed hover templates showing performance metrics
+ * - Responsive layout with annotations and custom margins
+ *
+ * Performance dimensions analyzed:
+ * - Performance, Reliability, Security, Usability
+ * - Scalability, Maintainability, Documentation, Support
+ *
+ * The radar chart enables quick visual comparison of strengths and weaknesses
+ * across different products, making patterns and trade-offs easily
+ identifiable.
+ *
+ * @image html polar_radar_chart.png "Multi-Product Performance Radar Chart"
+ *
+
+ * @date 2024
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cstddef>

@@ -1,4 +1,45 @@
 
+/**
+ * @file gallery_golden_ratio.cpp
+ * @brief Golden Ratio Spiral - Mathematical Beauty in Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_golden_ratio.cpp
+ *
+ * # Golden Ratio Spiral Example
+ *
+ * This example demonstrates the mathematical beauty of the golden ratio by
+ * creating a logarithmic spiral overlaid on a heatmap with proportionally sized
+ * rectangles. It showcases the mathematical relationship between the golden
+ * ratio constant (φ ≈ 1.618) and natural spiral patterns found throughout
+ * nature.
+ *
+ * ## What You'll Learn
+ * - Mathematical visualization of the golden ratio and logarithmic spirals
+ * - Complex mathematical coordinate transformations and scaling
+ * - Combining multiple plot types (scatter + heatmap) in a single visualization
+ * - Using mathematical constants and exponential functions for organic curves
+ * - Creating proportionally sized geometric elements based on mathematical
+ * ratios
+ * - Advanced layout customization for mathematical and scientific presentations
+ * - Working with linspace utility for generating smooth parametric curves
+ *
+ * ## Sample Output
+ * The example creates an artistic mathematical visualization featuring:
+ * - White logarithmic spiral curve generated using exponential decay
+ * - Colorful heatmap background with rectangles sized according to golden ratio
+ * - Viridis color scale providing smooth color transitions
+ * - Square aspect ratio (700x700) emphasizing the geometric relationships
+ * - Centered composition showing the mathematical harmony of proportions
+ *
+ * @image html golden_ratio.png "Golden Ratio Spiral with Proportional
+ * Rectangles"
+ *
+ * @see linspace() For generating smooth parametric coordinates
+ * @see parseGalleryArgs() For command line argument handling
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include "utils/linspace.hpp"

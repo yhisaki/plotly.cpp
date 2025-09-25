@@ -4,6 +4,8 @@
 
 **Plotly.cpp** brings the power of [Plotly.js](https://plotly.com/javascript/) to C++. This library provides a modern C++17 interface for creating interactive data visualizations with real-time updates, event handling, and export capabilities.
 
+![Plotly.cpp Demo](/docs/images/gallery.png)
+
 ## Key Features
 
 - 🔗 **Plotly.js API Mapping** - Translation of most Plotly.js methods
