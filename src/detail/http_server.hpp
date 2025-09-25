@@ -43,7 +43,7 @@ public:
 
   /**
    * @brief Construct a server serving a single HTML content
-   * @param html_content The HTML content to serve
+   * @param htmlContent The HTML content to serve
    */
   explicit HttpServer(std::string_view htmlContent);
 
@@ -76,7 +76,7 @@ public:
 
   /**
    * @brief Configure the server to respond with a specific WebSocket port
-   * @param ws_port The WebSocket port to report
+   * @param wsPort The WebSocket port to report
    *
    * Sets up an endpoint that responds to WebSocket port requests with the
    * specified port number. This is used for WebSocket communication between
