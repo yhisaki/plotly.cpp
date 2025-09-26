@@ -126,6 +126,11 @@ jobs:
           files: build-coverage/coverage_filtered.info
           fail_ci_if_error: true
 
+      - name: Debug artifact paths
+        run: |
+          echo "Listing current directory contents"
+          ls -R .
+
       - name: Upload HTML coverage reports
         if: always()
         uses: actions/upload-artifact@v4
