@@ -2,9 +2,11 @@ name: Generate Doxygen Documentation
 
 on:
   push:
-    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   doxygen:
@@ -21,7 +23,11 @@ jobs:
     - name: Install Doxygen
       run: |
         sudo apt-get update
-        sudo apt-get install -y doxygen graphviz
+        sudo apt-get install -y graphviz build-essential
+        wget https://github.com/doxygen/doxygen/releases/download/Release_1_14_0/doxygen-1.14.0.linux.bin.tar.gz
+        tar -xzf doxygen-1.14.0.linux.bin.tar.gz
+        cd doxygen-1.14.0 && sudo make install
+        doxygen --version
 
     - name: Generate documentation
       run: |
@@ -35,16 +41,16 @@ jobs:
         retention-days: 30
 
     - name: Setup Pages
-      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/configure-pages@v4
 
     - name: Upload to GitHub Pages
-      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-pages-artifact@v3
       with:
         path: ./doxygen/html
 
     - name: Deploy to GitHub Pages
-      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: deployment
       uses: actions/deploy-pages@v4
