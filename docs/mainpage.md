@@ -10,11 +10,19 @@
 
 - 🔗 **Plotly.js API Mapping** - Translation of most Plotly.js methods
 
+![Plotly.js API Mapping](/docs/images/plotly_cpp_api.svg)
+
 - 🎨 **Advanced Visualizations** - Rich variety of plot types. See [gallery](gallery/README.md) for more examples.
+
+![Advanced Visualizations](/docs/images/financial_candlestick.png)
 
 - ⚡ **Real-Time Updates** - Stream data with smooth animations and live updates
 
+![Real-Time Updates](/docs/images/double_pendulum.gif)
+
 - 🔄 **Bidirectional Events** - Handle user interactions from C++
+
+![Bidirectional Events](/docs/images/event_handling.gif)
 
 ## Architecture
 
@@ -47,11 +55,15 @@ int main() {
         {"mode", "lines+markers"}
     };
 
-    fig.newPlot(plotly::Array{trace});
+    plotly::Object layout = {{"title", {{"text", "Hello World!"}}}};
+
+    fig.newPlot(plotly::Array{trace}, layout);
     fig.waitClose();
     return 0;
 }
 ```
+
+![Hello World](/docs/images/hello-world.png)
 
 ## Core Classes
 
