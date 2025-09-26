@@ -1,4 +1,44 @@
 
+/**
+ * @file gallery_box_violin_plots.cpp
+ * @brief Box and Violin Plots - Statistical Distribution Comparison
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_box_violin_plots.cpp
+ *
+ * # Box and Violin Plots Example
+ *
+ * This example demonstrates advanced statistical visualization by comparing box
+ * plots and violin plots side-by-side, showing how different plot types reveal
+ * different aspects of data distribution patterns including outliers,
+ * quartiles, and density shapes.
+ *
+ * ## What You'll Learn
+ * - Creating box plots with quartile statistics and outlier detection
+ * - Generating violin plots to visualize full probability density functions
+ * - Comparing multiple statistical distributions with different characteristics
+ * - Using subplots to display complementary visualization techniques
+ * - Generating synthetic data with various statistical distributions (normal,
+ * bimodal, gamma)
+ * - Configuring advanced plot styling and annotations for statistical clarity
+ *
+ * ## Sample Output
+ * The example creates side-by-side comparison plots showing four treatment
+ * groups:
+ * - Control group: Normal distribution (μ=50, σ=10)
+ * - Treatment A: Shifted normal distribution (μ=55, σ=8)
+ * - Treatment B: Bimodal distribution with two peaks at 45 and 65
+ * - Treatment C: Right-skewed gamma distribution starting at 30
+ * - Left panel: Box plots highlighting quartiles, medians, and outliers
+ * - Right panel: Violin plots showing complete distribution shapes and density
+ * curves
+ *
+ * @image html box_violin_plots.png "Box and Violin Plots Comparison Output"
+ *
+ * @see plotly::Figure For the main plotting interface
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cstddef>

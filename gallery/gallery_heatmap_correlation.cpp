@@ -1,4 +1,37 @@
 
+/**
+ * @file gallery_heatmap_correlation.cpp
+ * @brief Business Metrics Correlation Matrix Heatmap
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_heatmap_correlation.cpp
+ *
+ * This gallery example demonstrates creating an interactive correlation matrix
+ heatmap
+ * using Plotly.cpp. It generates realistic business performance data across
+ multiple
+ * metrics and displays their correlations using color coding and text
+ annotations.
+ *
+ * Features demonstrated:
+ * - Symmetric correlation matrix generation with realistic business
+ relationships
+ * - Heatmap visualization with custom colorscale (RdBu for diverging data)
+ * - Text annotations showing correlation coefficients on each cell
+ * - Custom colorbar with centered zero point for proper correlation display
+ * - Responsive layout with rotated axis labels and proper margins
+ *
+ * The visualization helps identify relationships between different business
+ metrics
+ * such as revenue, profit, marketing spend, and customer satisfaction.
+ *
+ * @image html heatmap_correlation.png "Business Metrics Correlation Matrix"
+ *
+
+ * @date 2024
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <array>

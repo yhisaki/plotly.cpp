@@ -1,4 +1,42 @@
 
+/**
+ * @file gallery_statistical_distributions.cpp
+ * @brief Statistical Distribution Functions and Sampling Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_statistical_distributions.cpp
+ * This gallery example demonstrates visualization of multiple statistical
+ * distributions using Plotly.cpp. It combines theoretical probability density
+ * functions with empirical histogram data to showcase both continuous
+ * distributions and sample-based analysis.
+ *
+ * Features demonstrated:
+ * - Multiple probability density function (PDF) implementations and plotting
+ * - Theoretical vs. empirical distribution comparison using dual y-axes
+ * - Custom mathematical function implementations for statistical distributions
+ * - Histogram generation from random samples with density normalization
+ * - Multi-trace plotting with different line styles and colors
+ * - Dual y-axis configuration for comparing different data types
+ * - Random number generation and statistical sampling techniques
+ *
+ * Statistical distributions implemented:
+ * - Normal distribution: N(μ=2, σ=1) with standard bell curve shape
+ * - Exponential distribution: Exp(λ=0.5) showing exponential decay
+ * - Gamma distribution: Γ(k=2, θ=1.5) with shape and scale parameters
+ * - Empirical normal samples: 1000 random samples for comparison
+ *
+ * Mathematical concepts:
+ * - Probability density functions and their mathematical formulations
+ * - Random sampling and empirical distribution estimation
+ * - Statistical distribution parameters and their effects on shape
+ * - Gamma function usage in probability calculations
+ *
+ * @image html statistical_distributions.png "Statistical Distributions
+ * Comparison"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include "utils/linspace.hpp"

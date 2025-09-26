@@ -1,0 +1,56 @@
+name: Generate Doxygen Documentation
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  doxygen:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Doxygen
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y graphviz build-essential
+        wget https://github.com/doxygen/doxygen/releases/download/Release_1_14_0/doxygen-1.14.0.linux.bin.tar.gz
+        tar -xzf doxygen-1.14.0.linux.bin.tar.gz
+        cd doxygen-1.14.0 && sudo make install
+        doxygen --version
+
+    - name: Generate documentation
+      run: |
+        doxygen Doxyfile
+
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: doxygen-docs-${{ github.ref_name }}
+        path: doxygen/html/
+        retention-days: 30
+
+    - name: Setup Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/configure-pages@v4
+
+    - name: Upload to GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./doxygen/html
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      id: deployment
+      uses: actions/deploy-pages@v4

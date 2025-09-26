@@ -1,4 +1,42 @@
 
+/**
+ * @file gallery_treemap_hierarchy.cpp
+ * @brief Corporate Organization Structure Hierarchical Treemap
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_treemap_hierarchy.cpp
+ * This gallery example demonstrates creating an interactive hierarchical
+ * treemap using Plotly.cpp to visualize corporate organizational structures.
+ * Treemaps excel at showing hierarchical data with proportional area
+ * representation, making it ideal for organizational analysis and resource
+ * allocation visualization.
+ *
+ * Features demonstrated:
+ * - Multi-level hierarchical data visualization using parent-child
+ * relationships
+ * - Proportional area mapping representing team sizes within departments
+ * - Interactive drilling down through organizational levels
+ * - Custom colorscale (Viridis) for visual differentiation of hierarchy levels
+ * - Rich hover templates showing team details and organizational context
+ * - Configurable tree depth control for focused view management
+ * - Custom text information display (labels, values, percentages)
+ * - Professional layout with margins optimized for organizational charts
+ *
+ * Organizational structure represented:
+ * - Root: Company (275 total employees)
+ * - Departments: Engineering (120), Sales (80), Marketing (45), HR (30)
+ * - Teams: Frontend, Backend, DevOps, QA, Enterprise, SMB, etc.
+ * - Complete hierarchical breakdown with accurate team size calculations
+ *
+ * The treemap provides immediate visual understanding of organizational
+ * structure, team sizes, and departmental resource distribution, making it
+ * valuable for HR analytics and organizational planning.
+ *
+ * @image html treemap_hierarchy.png "Corporate Organization Treemap"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <string>

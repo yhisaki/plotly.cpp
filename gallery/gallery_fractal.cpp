@@ -1,4 +1,44 @@
 
+/**
+ * @file gallery_fractal.cpp
+ * @brief Fractal Visualization - Mandelbrot and Julia Sets
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_fractal.cpp
+ *
+ * # Fractal Visualization Example
+ *
+ * This example demonstrates advanced mathematical visualization by computing
+ * and displaying the famous Mandelbrot and Julia fractals. It showcases complex
+ * number calculations, iterative algorithms, and interactive switching between
+ * different fractal types using Plotly's update menu functionality.
+ *
+ * ## What You'll Learn
+ * - Mathematical fractal generation using complex number arithmetic
+ * - Implementing the Mandelbrot set iterative escape algorithm
+ * - Computing Julia sets with different parameter values
+ * - Creating interactive heatmap visualizations of mathematical data
+ * - Using Plotly's update menu buttons for switching between datasets
+ * - Color mapping iterations to create visually appealing mathematical art
+ * - Complex plane coordinate system visualization
+ *
+ * ## Sample Output
+ * The example creates an interactive fractal explorer featuring:
+ * - Mandelbrot set visualization with "Hot" colorscale showing iteration counts
+ * - Julia set with parameter \f$c = -0.8 + 0.156i\f$ using "Viridis" colorscale
+ * - Interactive buttons to switch between the two fractal types
+ * - 400x400 pixel resolution showing intricate fractal boundary details
+ * - Hover information displaying complex coordinates and iteration values
+ *
+ * @image html fractal_julia.png "Julia Set Fractal Visualization"
+ * @image html fractal_mandelbrot.png "Mandelbrot and Julia Set Fractal
+ * Visualization"
+ *
+ * @see std::complex For complex number arithmetic
+ * @see plotly::Object For heatmap trace configuration with update menus
+ */
+
 #include "plotly/plotly.hpp"
 #include <complex>
 #include <cstdlib>

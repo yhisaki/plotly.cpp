@@ -1,4 +1,41 @@
 
+/**
+ * @file gallery_financial_candlestick.cpp
+ * @brief Financial Candlestick Chart - OHLC Stock Data Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_financial_candlestick.cpp
+ *
+ * # Financial Candlestick Chart Example
+ *
+ * This example demonstrates how to create professional financial charts using
+ * candlestick traces with volume indicators. It generates synthetic stock
+ * market data and visualizes it with the standard OHLC (Open, High, Low, Close)
+ * format used in financial analysis.
+ *
+ * ## What You'll Learn
+ * - Creating candlestick charts for financial data visualization
+ * - Generating realistic synthetic stock data with random price movements
+ * - Implementing dual y-axis layouts for price and volume data
+ * - Customizing candlestick colors for bullish/bearish patterns
+ * - Working with time-series data and date formatting
+ * - Adding volume bars as complementary indicators
+ *
+ * ## Sample Output
+ * The example creates a comprehensive financial chart featuring:
+ * - 60-day candlestick chart with OHLC price data
+ * - Green candles for price increases, red candles for decreases
+ * - Volume bars displayed below the main price chart
+ * - Interactive hover information showing detailed price data
+ * - Professional styling suitable for financial analysis
+ *
+ * @image html financial_candlestick.png "Financial Candlestick Chart Example"
+ *
+ * @see plotly::Object For candlestick trace configuration
+ * @see parseGalleryArgs() For command line argument handling
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cstdlib>

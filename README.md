@@ -9,7 +9,7 @@
 ![Platform](https://img.shields.io/badge/platform-Linux-lightgrey)
 
   <p align="center">
-    <img src="/assets/gallery.png" alt="Plotly.cpp Demo" width="600">
+    <img src="/docs/images/gallery.png" alt="Plotly.cpp Demo" width="600">
   </p>
 </div>
 
@@ -53,19 +53,19 @@
 
 - 🔗 **Plotly.js API Mapping** - Translation of most Plotly.js methods
 
-  <img src="/assets/plotly_cpp_api.svg" alt="Plotly.js API Mapping" width="400">
+  <img src="/docs/images/plotly_cpp_api.svg" alt="Plotly.js API Mapping" width="400">
 
 - 🎨 **Advanced Visualizations** - Rich variety of plot types. See [gallery](gallery/README.md) for more examples.
 
-  <img src="/assets/financial_candlestick.png" alt="Advanced Visualizations" width="400">
+  <img src="/docs/images/financial_candlestick.png" alt="Advanced Visualizations" width="400">
 
 - ⚡ **Real-Time Updates** - Stream data with smooth animations and live updates
 
-  <img src="/assets/double_pendulum.gif" alt="Real-Time Updates" width="400">
+  <img src="/docs/images/double_pendulum.gif" alt="Real-Time Updates" width="400">
 
 - 🔄 **Bidirectional Events** - Handle user interactions from C++
 
-  <img src="/assets/event_handling.gif" alt="Bidirectional Events" width="400">
+  <img src="/docs/images/event_handling.gif" alt="Bidirectional Events" width="400">
 
 ## 🔄 Plotly.js Compatibility
 
@@ -94,14 +94,14 @@ Similar data structures, same parameters, and similar behavior with C++ syntax.
 
 ### Installation
 
-### Install from deb package (Recommended)
+#### Install from deb package (Recommended)
 
 ```bash
 wget https://github.com/yhisaki/plotly.cpp/releases/download/v0.1.0/libplotly-cpp-0.1.0-Linux.deb
 sudo apt install ./libplotly-cpp-0.1.0-Linux.deb
 ```
 
-#### Basic Installation with FetchContent
+#### Install from FetchContent
 
 Add to your CMake project using FetchContent:
 
@@ -115,6 +115,14 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(plotly-cpp)
+```
+
+#### Usage
+
+After installation, add the following to your `CMakeLists.txt`:
+
+```cmake
+find_package(plotly-cpp REQUIRED)
 
 target_link_libraries(your_target plotly-cpp::plotly-cpp)
 ```
@@ -166,7 +174,7 @@ Plotly.newPlot("myDiv", [
 ]);
 ```
 
-![Hello World Example](/assets/hello-world.png)
+![Hello World Example](/docs/images/hello-world.png)
 
 ### Real-Time Streaming Data
 
@@ -211,7 +219,7 @@ function streamData() {
 }
 ```
 
-![streaming_data](/assets/streaming_data.gif)
+![streaming_data](/docs/images/streaming_data.gif)
 
 ### 3D Surface Plots
 
@@ -261,7 +269,7 @@ Plotly.newPlot("myDiv", [
 ]);
 ```
 
-![3d_surface](/assets/3d_surface.gif)
+![3d_surface](/docs/images/3d_surface.gif)
 
 ### Multi-Trace Styling & Legends
 
@@ -346,7 +354,7 @@ Plotly.newPlot("myDiv", [trace1, trace2, trace3], layout);
 Plotly.downloadImage("myDiv", { format: "png", filename: "basic" });
 ```
 
-![multi-trace-styling](/assets/multi_trace_styling.png)
+![multi-trace-styling](/docs/images/multi_trace_styling.png)
 
 ### 2×2 Subplots
 
@@ -375,7 +383,7 @@ int main() {
 
 📁 **[Complete example](gallery/gallery_2x2_subplots.cpp)**
 
-![2x2 Subplots](/assets/2x2_subplots.png)
+![2x2 Subplots](/docs/images/2x2_subplots.png)
 
 ### Interactive Event Handling
 
@@ -409,13 +417,13 @@ int main() {
 
 📁 **[Complete example](gallery/gallery_event_handling.cpp)**
 
-![event_handling](/assets/event_handling.gif)
+![event_handling](/docs/images/event_handling.gif)
 
 ## 🎨 Advanced Gallery
 
 More complex examples and use cases are available in the [gallery](gallery).
 
-[![gallery](/assets/gallery.png)](gallery)
+[![gallery](/docs/images/gallery.png)](gallery)
 
 ## 🏗️ Architecture Overview
 

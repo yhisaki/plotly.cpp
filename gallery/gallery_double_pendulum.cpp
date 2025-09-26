@@ -1,3 +1,82 @@
+/**
+ * @file gallery_double_pendulum.cpp
+ * @brief Double Pendulum Simulation - Chaotic Dynamics Visualization
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_double_pendulum.cpp
+ *
+ * # Double Pendulum Simulation
+ *
+ * This example demonstrates chaotic dynamics through real-time simulation of a
+ * double pendulum system, showcasing the complex, unpredictable motion that
+ * emerges from simple nonlinear differential equations and sensitive dependence
+ * on initial conditions.
+ *
+ * ## Mathematical Framework
+ * The double pendulum system is governed by the coupled nonlinear differential
+ * equations:
+ *
+ * \f[
+ * \ddot{\theta_1} = \frac{-g(2m_1+m_2) \sin\theta_1 - m_2 g
+ * \sin(\theta_1-2\theta_2) - 2 \sin(\theta_1-\theta_2) m_2 ( \omega_2^2 l_2 +
+ * \omega_1^2 l_1 \cos(\theta_1-\theta_2) )}{l_1 ( 2m_1 + m_2 - m_2
+ * \cos(2\theta_1-2\theta_2) )}
+ * \f]
+ *
+ * \f[
+ * \ddot{\theta_2} = \frac{2 \sin(\theta_1-\theta_2) ( \omega_1^2 l_1 (m_1+m_2)
+ * + g (m_1+m_2) \cos\theta_1 + \omega_2^2 l_2 m_2 \cos(\theta_1-\theta_2)
+ * )}{l_2 ( 2m_1 + m_2 - m_2 \cos(2\theta_1-2\theta_2) )}
+ * \f]
+ *
+ * where:
+ * - \f$\theta_1, \theta_2\f$ are the angles from vertical
+ * - \f$\omega_1 = \dot{\theta_1}, \omega_2 = \dot{\theta_2}\f$ are the angular
+ * velocities
+ * - \f$l_1, l_2\f$ are the pendulum lengths
+ * - \f$m_1, m_2\f$ are the masses
+ * - \f$g\f$ is gravitational acceleration
+ *
+ * The state vector is \f$[\theta_1, \theta_2, \omega_1, \omega_2]\f$ with
+ * coordinate transformation:
+ * \f$x = l\sin(\theta)\f$, \f$y = -l\cos(\theta)\f$
+ *
+ * ## What You'll Learn
+ * - Implementing physics simulations with coupled nonlinear differential
+ * equations
+ * - Using 4th-order Runge-Kutta (RK4) integration for accurate numerical
+ * solutions
+ * - Visualizing chaotic systems with real-time trajectory tracking and trail
+ * visualization
+ * - Working with canonical equations of motion for double pendulum dynamics
+ * - Creating smooth physics animations with proper time stepping and state
+ * management
+ * - Understanding conservation of energy in Hamiltonian systems with small
+ * damping
+ * - Managing complex state vectors and multi-body mechanical system
+ * visualization
+ *
+ * ## Sample Output
+ * The example creates a real-time physics simulation featuring:
+ * - Two connected pendulum masses with realistic physics (lengths
+ * \f$l_1=l_2=1\f$m, masses \f$m_1=m_2=1\f$kg)
+ * - Gray connecting rods showing the physical linkage structure
+ * - Red and blue markers representing the two pendulum masses
+ * - Colored trails showing the historical motion paths of both masses
+ * - Chaotic motion patterns that are highly sensitive to initial conditions
+ * - Real-time updates at approximately 100 FPS for smooth animation
+ * - Proper angle wrapping and energy-conserving integration
+ *
+ * The system demonstrates classic chaotic behavior where small changes in
+ * initial conditions lead to dramatically different long-term evolution.
+ *
+ * @image html double_pendulum.gif "Double Pendulum Chaotic Motion Output"
+ *
+ * @see plotly::Figure For the main plotting interface
+ * @see plotly::Figure::update() For real-time plot updates during simulation
+ */
+
 #include "plotly/plotly.hpp"
 #include <array>
 #include <chrono>
@@ -26,14 +105,6 @@ inline auto wrapAngle(double x) -> double {
 }
 
 // Canonical double-pendulum accelerations for absolute angles from vertical
-// Reference form:
-// theta1'' = [ -g(2m1+m2) sinθ1 - m2 g sin(θ1-2θ2)
-//               - 2 sin(θ1-θ2) m2 ( ω2^2 l2 + ω1^2 l1 cos(θ1-θ2) ) ]
-//            / [ l1 ( 2m1 + m2 - m2 cos(2θ1-2θ2) ) ]
-//
-// theta2'' = [  2 sin(θ1-θ2) ( ω1^2 l1 (m1+m2) + g (m1+m2) cosθ1
-//               + ω2^2 l2 m2 cos(θ1-θ2) ) ]
-//            / [ l2 ( 2m1 + m2 - m2 cos(2θ1-2θ2) ) ]
 static inline auto accelerations(const State &s, const Params &p)
     -> std::array<double, 2> {
   const double th1 = s[0], th2 = s[1];

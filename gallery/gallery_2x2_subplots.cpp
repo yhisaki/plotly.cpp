@@ -1,3 +1,34 @@
+/**
+ * @file gallery_2x2_subplots.cpp
+ * @brief 2x2 Subplots - Multiple Plot Layout Example
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_2x2_subplots.cpp
+ *
+ * # 2x2 Subplots Example
+ *
+ * This example demonstrates how to create multiple subplots in a 2x2 grid
+ * layout, showing different sine wave phases in each subplot.
+ *
+ * ## What You'll Learn
+ * - Creating subplot layouts with multiple traces
+ * - Positioning plots in grid arrangements
+ * - Generating mathematical data for visualization
+ * - Working with phase-shifted sine waves
+ *
+ * ## Sample Output
+ * The example creates a 2x2 grid showing sine waves with different phases:
+ * - Top-left: sin(t) (phase 0)
+ * - Top-right: sin(t + π/4) (phase π/4)
+ * - Bottom-left: sin(t + π/2) (phase π/2)
+ * - Bottom-right: sin(t + 3π/4) (phase 3π/4)
+ *
+ * @image html 2x2_subplots.png "2x2 Subplots Example Output"
+ *
+ * @see plotly::Figure For the main plotting interface
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cmath>

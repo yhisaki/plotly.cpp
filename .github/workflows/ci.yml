@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, develop]
   pull_request:
-    branches: [main, master]
+    branches: [main, develop]
   workflow_dispatch:
 
 env:
@@ -119,9 +119,10 @@ jobs:
           xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" make coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          file: ./build-coverage/coverage_filtered.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./build-coverage/coverage_filtered.info
           fail_ci_if_error: true
 
       - name: Upload HTML coverage reports

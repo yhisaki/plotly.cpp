@@ -1,4 +1,36 @@
 
+/**
+ * @file gallery_3d_surface.cpp
+ * @brief 3D Surface Plot - Three-Dimensional Visualization Example
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_3d_surface.cpp
+ *
+ * # 3D Surface Plot Example
+ *
+ * This example demonstrates how to create three-dimensional surface plots using
+ * plotly.cpp, visualizing mathematical functions in 3D space.
+ *
+ * ## What You'll Learn
+ * - Creating 3D surface plots from mathematical functions
+ * - Generating 2D grid data for surface visualization
+ * - Working with colorscales and surface styling
+ * - Mathematical function visualization techniques
+ *
+ * ## Sample Output
+ * The example creates a 3D surface plot of the function:
+ * ```
+ * z = sin(√(x² + y²))
+ * ```
+ * This creates a ripple effect emanating from the center, visualized with
+ * the Viridis colorscale for better depth perception.
+ *
+ * @image html 3d_surface.gif "3D Surface Plot Example Output"
+ *
+ * @see plotly::Figure For the main plotting interface
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cmath>

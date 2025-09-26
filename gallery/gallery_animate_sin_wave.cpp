@@ -1,4 +1,43 @@
 
+/**
+ * @file gallery_animate_sin_wave.cpp
+ * @brief Animated Sin Wave - Real-time Animation with Plotly Frames
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_animate_sin_wave.cpp
+ *
+ * # Animated Sin Wave Example
+ *
+ * This example demonstrates real-time animation capabilities using Plotly's
+ * frame-based animation system to visualize a phase-shifting sine wave with
+ * smooth transitions and interactive playback controls.
+ *
+ * ## What You'll Learn
+ * - Creating smooth animations with Plotly's addFrames() and animate()
+ * functions
+ * - Implementing phase-shifting mathematical functions for dynamic
+ * visualization
+ * - Adding interactive play/pause controls to animated plots
+ * - Configuring animation timing and transition parameters
+ * - Building frame-based animations with multiple data points per frame
+ *
+ * ## Sample Output
+ * The example creates a continuously animated sine wave that shifts phase over
+ * time:
+ * - X range: -4π to 4π with 400 sample points for smooth curves
+ * - 60 animation frames showing phase progression from 0 to 12π
+ * - Interactive controls allowing users to play, pause, and control animation
+ * speed
+ * - Blue sine wave with equation sin(x + φ) where φ increases with each frame
+ *
+ * @image html animate_sin_wave.gif "Animated Sin Wave Example Output"
+ *
+ * @see plotly::Figure For the main plotting interface
+ * @see plotly::Figure::addFrames() For adding animation frames
+ * @see plotly::Figure::animate() For controlling animation playback
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/linspace.hpp"
 #include <cmath>

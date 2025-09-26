@@ -49,7 +49,7 @@ define sanitizer_flags
 endef
 
 # ===== Build Targets =====
-.PHONY: release debug asan tsan coverage coverage-clang format tidy clean package
+.PHONY: release debug asan tsan coverage coverage-clang format tidy clean package doxygen
 
 release:
 	$(call cmake_configure,$(BUILD_DIR), -DCMAKE_BUILD_TYPE=Release)
@@ -133,5 +133,16 @@ package:
 	@echo "Package files:"
 	@find $(BUILD_DIR) -name "*.deb" -type f -exec ls -la {} \;
 
+doxygen:
+	@echo "Generating Doxygen documentation..."
+	@if ! command -v doxygen >/dev/null 2>&1; then \
+		echo "Error: doxygen not found. Please install doxygen."; \
+		echo "  Ubuntu/Debian: sudo apt install doxygen graphviz"; \
+		exit 1; \
+	fi
+	@command doxygen Doxyfile
+	@echo "Documentation generated successfully in doxygen/html/"
+	@echo "Open doxygen/html/index.html in your browser to view the documentation"
+
 clean:
-	@rm -rf $(BUILD_DIR) $(BUILD_DIR_ASAN) $(BUILD_DIR_TSAN) $(BUILD_DIR_COV) $(COVERAGE_OUTPUT_DIR)
+	@rm -rf $(BUILD_DIR) $(BUILD_DIR_ASAN) $(BUILD_DIR_TSAN) $(BUILD_DIR_COV) $(COVERAGE_OUTPUT_DIR) doxygen

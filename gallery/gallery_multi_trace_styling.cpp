@@ -1,3 +1,32 @@
+/**
+ * @file gallery_multi_trace_styling.cpp
+ * @brief Multi-Trace Plot with Advanced Styling
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_multi_trace_styling.cpp
+ * This gallery example demonstrates creating plots with multiple traces and
+ * advanced styling options using Plotly.cpp. It showcases different line
+ * styles, colors, and mathematical functions plotted together with custom
+ * legend configuration.
+ *
+ * Features demonstrated:
+ * - Multiple trace plotting with different mathematical functions
+ * - Custom line styling (solid, dashed lines with different colors)
+ * - Automatic and manual color assignment for traces
+ * - Legend configuration and trace naming
+ * - Axis range control and custom plot dimensions
+ * - Mathematical function visualization (sine, logarithmic, constant functions)
+ *
+ * The plot displays three mathematical relationships:
+ * - A sine wave function showing periodic behavior
+ * - A logarithmic growth curve demonstrating non-linear scaling
+ * - A constant horizontal line for reference comparison
+ *
+ * @image html multi_trace_styling.png "Multi-Trace Mathematical Functions Plot"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <cmath>

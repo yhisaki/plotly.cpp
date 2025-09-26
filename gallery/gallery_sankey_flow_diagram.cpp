@@ -1,4 +1,40 @@
 
+/**
+ * @file gallery_sankey_flow_diagram.cpp
+ * @brief Energy Flow Sankey Diagram Visualization
+ *
+ * @author plotly.cpp contributors
+ * @date 2025
+ *
+ * @example gallery_sankey_flow_diagram.cpp
+ * This gallery example demonstrates creating a comprehensive Sankey diagram
+ * using Plotly.cpp to visualize energy flows from sources through sectors to
+ * end uses. Sankey diagrams excel at showing flow quantities and relationships
+ * in complex systems through proportional link widths.
+ *
+ * Features demonstrated:
+ * - Multi-stage flow visualization from sources to intermediate sectors to end
+ * uses
+ * - Node categorization with color coding (sources, sectors, end uses)
+ * - Proportional link width representing flow quantities
+ * - Transparent link colors derived from source node colors
+ * - Interactive hover information showing detailed flow data
+ * - Custom node positioning and styling with thickness control
+ * - Comprehensive energy system modeling with realistic flow relationships
+ * - Professional layout with annotations and proper margins
+ *
+ * Energy system components:
+ * - Sources: Coal, Natural Gas, Nuclear, Hydro, Solar/Wind
+ * - Sectors: Electricity Generation, Industrial, Transportation, Residential
+ * - End Uses: Lighting, Heating, Manufacturing, Transportation
+ *
+ * The diagram provides insights into energy distribution patterns, bottlenecks,
+ * and the relative importance of different pathways in the energy system.
+ *
+ * @image html sankey_flow_diagram.png "Energy Flow Sankey Diagram"
+ *
+ */
+
 #include "plotly/plotly.hpp"
 #include "utils/arg_parser.hpp"
 #include <string>
