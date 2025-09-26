@@ -9,6 +9,10 @@ on:
 jobs:
   doxygen:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
 
     steps:
     - name: Checkout repository
@@ -30,11 +34,17 @@ jobs:
         path: doxygen/html/
         retention-days: 30
 
+    - name: Setup Pages
+      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+      uses: actions/configure-pages@v4
+
+    - name: Upload to GitHub Pages
+      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./doxygen/html
+
     - name: Deploy to GitHub Pages
       if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./doxygen/html
-        destination_dir: ${{ github.ref_name }}
-        cname: false
+      id: deployment
+      uses: actions/deploy-pages@v4
