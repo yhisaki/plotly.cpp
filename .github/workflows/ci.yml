@@ -117,18 +117,21 @@ jobs:
       - name: Generate coverage report
         run: |
           xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" make coverage
+          ls -la
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./build-coverage/coverage_filtered.info
+          files: build-coverage/coverage_filtered.info
           fail_ci_if_error: true
 
       - name: Upload HTML coverage reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: |
             build-coverage/coverage_filtered.info
             coverage/
+          if-no-files-found: warn
