@@ -25,6 +25,9 @@ runs:
           libboost-dev \
           libboost-system-dev
 
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v2
+
     - name: Install extra packages
       if: inputs.extra-packages != ''
       shell: bash

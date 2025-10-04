@@ -44,7 +44,7 @@ jobs:
       - name: Run tests
         run: |
           cd ${{github.workspace}}/build
-          xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" ctest --output-on-failure --verbose --timeout ${{ env.CTEST_TIMEOUT }}
+          ctest --output-on-failure --verbose --timeout ${{ env.CTEST_TIMEOUT }}
 
       - name: Upload test results
         if: always()
@@ -92,7 +92,7 @@ jobs:
           elif [ "${{ matrix.sanitizer }}" = "tsan" ]; then
             export TSAN_OPTIONS="abort_on_error=1"
           fi
-          xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" ctest --output-on-failure --verbose --timeout ${{ env.CTEST_TIMEOUT }}
+          ctest --output-on-failure --verbose --timeout ${{ env.CTEST_TIMEOUT }}
 
       - name: Upload sanitizer results
         if: always()
@@ -120,7 +120,7 @@ jobs:
 
       - name: Generate coverage report
         run: |
-          xvfb-run -a --server-args="-screen 0 1024x768x24 -ac +extension GLX +render -noreset" make coverage
+          make coverage
 
       - name: Upload HTML coverage reports
         uses: actions/upload-artifact@v4
