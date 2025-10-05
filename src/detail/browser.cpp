@@ -3,49 +3,86 @@
 #include "nlohmann/json.hpp"
 #include "plotly/logger.hpp"
 #include "websockets_client.hpp"
-#include <arpa/inet.h>
 #include <array>
 #include <chrono>
-#include <csignal>
 #include <cstdio>
 #include <cstdlib>
-#include <fcntl.h>
 #include <filesystem>
 #include <functional>
 #include <future>
-#include <ifaddrs.h>
-#include <netinet/in.h>
 #include <string>
 #include <string_view>
+#include <utility>
+#include <vector>
+
+#ifdef _WIN32
+#include <iphlpapi.h>
+#include <shlobj.h>
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "iphlpapi.lib")
+#pragma comment(lib, "ws2_32.lib")
+#else
+#include <arpa/inet.h>
+#include <csignal>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <utility>
-#include <vector>
+#endif
 
 namespace plotly::detail {
 
 auto isDisplayAvailable() -> bool {
+#ifdef _WIN32
+  // On Windows, GUI is always available unless running as a service
+  return true;
+#else
   // Check if DISPLAY environment variable is set
   const char *displayEnv = std::getenv("DISPLAY");
   if (displayEnv == nullptr) {
     return false;
   }
   return true;
+#endif
 }
 
 auto isChromiumAvailable() -> bool {
+#ifdef _WIN32
+  // Check if chromium is installed on Windows
+  return system("where chrome.exe > nul 2>&1") == 0;
+#else
   // Check if chromium is installed
   return system("which chromium > /dev/null 2>&1") == 0;
+#endif
 }
 
 auto isGoogleChromeAvailable() -> bool {
+#ifdef _WIN32
+  // Check if google-chrome is installed on Windows
+  return system("where chrome.exe > nul 2>&1") == 0;
+#else
   // Check if google-chrome is installed
   return system("which google-chrome > /dev/null 2>&1") == 0;
+#endif
 }
 
 auto openBrowser(const std::string_view url) -> bool {
+#ifdef _WIN32
+  // Use ShellExecute on Windows
+  std::string urlStr(url);
+  HINSTANCE result = ShellExecuteA(nullptr, "open", urlStr.c_str(), nullptr,
+                                   nullptr, SW_SHOWNORMAL);
+  if (reinterpret_cast<INT_PTR>(result) <= 32) {
+    plotly::logError("Failed to open browser on Windows");
+    return false;
+  }
+  return true;
+#else
   pid_t pid = fork();
 
   if (pid < 0) {
@@ -86,11 +123,74 @@ auto openBrowser(const std::string_view url) -> bool {
 
     return true;
   }
+#endif
 }
 
 auto openChromiumWithHeadlessMode(const std::string_view url,
                                   int remoteDebuggingPort)
     -> std::pair<bool, std::function<void()>> {
+#ifdef _WIN32
+  // Windows implementation using CreateProcess
+  std::string portArg =
+      "--remote-debugging-port=" + std::to_string(remoteDebuggingPort);
+  std::string urlStr(url);
+
+  // Try common Chrome installation paths on Windows
+  std::vector<std::string> chromePaths = {
+      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+      std::string(std::getenv("LOCALAPPDATA") ? std::getenv("LOCALAPPDATA")
+                                              : "") +
+          "\\Google\\Chrome\\Application\\chrome.exe"};
+
+  PROCESS_INFORMATION pi = {nullptr, nullptr, 0, 0};
+  STARTUPINFOA si;
+  ZeroMemory(&si, sizeof(si));
+  si.cb = sizeof(si);
+  si.dwFlags = STARTF_USESHOWWINDOW;
+  si.wShowWindow = SW_HIDE;
+
+  bool success = false;
+  for (const auto &chromePath : chromePaths) {
+    std::string cmdLine = "\"" + chromePath + "\" --headless --disable-gpu " +
+                          "--no-sandbox --disable-dev-shm-usage " +
+                          "--disable-extensions " +
+                          "--enable-features=NetworkService,"
+                          "NetworkServiceInProcess " +
+                          portArg + " \"" + urlStr + "\"";
+
+    plotly::logTrace("Trying to open with: %s", chromePath.c_str());
+
+    if (CreateProcessA(nullptr, const_cast<char *>(cmdLine.c_str()), nullptr,
+                       nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si,
+                       &pi)) {
+      plotly::logDebug(
+          "Chromium in headless mode opened successfully (PID: %lu)",
+          pi.dwProcessId);
+      success = true;
+      break;
+    }
+  }
+
+  if (!success) {
+    plotly::logError(
+        "Failed to open chromium in headless mode - no browsers available");
+    return {false, []() -> void {}};
+  }
+
+  // Return success with a function that terminates the process
+  HANDLE hProcess = pi.hProcess;
+  DWORD processId = pi.dwProcessId;
+  CloseHandle(pi.hThread);
+
+  return {true, [hProcess, processId]() -> void {
+            plotly::logDebug("Terminating chromium in headless mode (PID: %lu)",
+                             processId);
+            TerminateProcess(hProcess, 0);
+            WaitForSingleObject(hProcess, INFINITE);
+            CloseHandle(hProcess);
+          }};
+#else
   pid_t pid = fork();
 
   if (pid < 0) {
@@ -159,10 +259,48 @@ auto openChromiumWithHeadlessMode(const std::string_view url,
               waitpid(pid, nullptr, 0);
             }};
   }
+#endif
 }
 
 auto getIpv4Addresses() -> std::vector<std::string> {
   std::vector<std::string> result;
+#ifdef _WIN32
+  // Windows implementation using GetAdaptersAddresses
+  ULONG bufferSize = 15000;
+  std::vector<BYTE> buffer(bufferSize);
+  auto *addresses = reinterpret_cast<IP_ADAPTER_ADDRESSES *>(buffer.data());
+
+  ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
+                GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME;
+
+  ULONG ret =
+      GetAdaptersAddresses(AF_INET, flags, nullptr, addresses, &bufferSize);
+
+  if (ret == ERROR_BUFFER_OVERFLOW) {
+    buffer.resize(bufferSize);
+    addresses = reinterpret_cast<IP_ADAPTER_ADDRESSES *>(buffer.data());
+    ret = GetAdaptersAddresses(AF_INET, flags, nullptr, addresses, &bufferSize);
+  }
+
+  if (ret != NO_ERROR) {
+    return result;
+  }
+
+  for (auto *adapter = addresses; adapter != nullptr; adapter = adapter->Next) {
+    for (auto *unicast = adapter->FirstUnicastAddress; unicast != nullptr;
+         unicast = unicast->Next) {
+      auto *sockaddr =
+          reinterpret_cast<struct sockaddr_in *>(unicast->Address.lpSockaddr);
+      if (sockaddr->sin_family == AF_INET) {
+        std::array<char, INET_ADDRSTRLEN> ip{};
+        if (inet_ntop(AF_INET, &(sockaddr->sin_addr), ip.data(),
+                      INET_ADDRSTRLEN) != nullptr) {
+          result.emplace_back(ip.data());
+        }
+      }
+    }
+  }
+#else
   struct ifaddrs *ifaddr = nullptr;
 
   if (getifaddrs(&ifaddr) == -1) {
@@ -185,6 +323,7 @@ auto getIpv4Addresses() -> std::vector<std::string> {
   }
 
   freeifaddrs(ifaddr);
+#endif
   return result;
 }
 
@@ -237,6 +376,35 @@ auto setDownloadDirectory(const std::filesystem::path &directory,
 }
 
 auto getDefaultDownloadDirectory() -> std::filesystem::path {
+#ifdef _WIN32
+  // Windows implementation using SHGetKnownFolderPath
+  PWSTR path = nullptr;
+  HRESULT hr = SHGetKnownFolderPath(FOLDERID_Downloads, 0, nullptr, &path);
+
+  if (SUCCEEDED(hr) && path != nullptr) {
+    // Convert wide string to narrow string
+    int size =
+        WideCharToMultiByte(CP_UTF8, 0, path, -1, nullptr, 0, nullptr, nullptr);
+    std::string result(size - 1, 0);
+    WideCharToMultiByte(CP_UTF8, 0, path, -1, &result[0], size, nullptr,
+                        nullptr);
+    CoTaskMemFree(path);
+    return {result};
+  }
+
+  if (path != nullptr) {
+    CoTaskMemFree(path);
+  }
+
+  // Fallback to USERPROFILE\Downloads
+  const char *userProfile = std::getenv("USERPROFILE");
+  if (userProfile != nullptr) {
+    return {std::filesystem::path(userProfile) / "Downloads"};
+  }
+
+  // Last resort fallback
+  return {std::filesystem::temp_directory_path()};
+#else
   std::array<char, 128> buffer{};
   std::string result;
   FILE *pipe = popen("xdg-user-dir DOWNLOAD", "r");
@@ -269,6 +437,7 @@ auto getDefaultDownloadDirectory() -> std::filesystem::path {
   }
 
   return {result};
+#endif
 }
 
 } // namespace plotly::detail
