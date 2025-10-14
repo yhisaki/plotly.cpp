@@ -3,11 +3,11 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
-        exclude: ^(webapp/|src/detail/third_party/)
+        exclude: ^(webapp/|src/detail/third_party/|docs/google0db1d878e960fa25.html)
       - id: end-of-file-fixer
-        exclude: ^(webapp/|src/detail/third_party/)
+        exclude: ^(webapp/|src/detail/third_party/|docs/google0db1d878e960fa25.html)
       - id: check-yaml
-        exclude: ^(webapp/|src/detail/third_party/)
+        exclude: ^(webapp/|src/detail/third_party/|docs/google0db1d878e960fa25.html)
 
   - repo: https://github.com/pre-commit/mirrors-clang-format
     rev: v20.1.8
