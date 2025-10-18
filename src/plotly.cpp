@@ -158,9 +158,15 @@ public:
 
   auto newPlot(const Object &data, const Object &layout,
                const Object &config) const -> bool {
-    auto result =
-        callPlotly("Plotly.newPlot",
-                   {{"data", data}, {"layout", layout}, {"config", config}});
+    Object params;
+    params["data"] = data;
+    if (!layout.empty()) {
+      params["layout"] = layout;
+    }
+    if (!config.empty()) {
+      params["config"] = config;
+    }
+    auto result = callPlotly("Plotly.newPlot", params);
     return result.has_value();
   }
 
@@ -171,14 +177,20 @@ public:
       -> bool {
     Object params;
     params["traceUpdate"] = traceUpdate;
-    params["layoutUpdate"] = layoutUpdate;
+    if (!layoutUpdate.empty()) {
+      params["layoutUpdate"] = layoutUpdate;
+    }
 
     auto result = callPlotly("Plotly.update", params);
     return result.has_value();
   }
 
   auto downloadImage(const Object &opts) const -> bool {
-    auto result = callPlotly("Plotly.downloadImage", {{"opts", opts}});
+    Object params;
+    if (!opts.empty()) {
+      params["opts"] = opts;
+    }
+    auto result = callPlotly("Plotly.downloadImage", params);
     if (!result.has_value()) {
       return false;
     }
@@ -222,7 +234,11 @@ public:
   /// Updates the figure layout
   /// @param layout Layout updates to apply
   auto relayout(const Object &layout) const -> bool {
-    auto result = callPlotly("Plotly.relayout", {{"layout", layout}});
+    Object params;
+    if (!layout.empty()) {
+      params["layout"] = layout;
+    }
+    auto result = callPlotly("Plotly.relayout", params);
     return result.has_value();
   }
 
@@ -242,8 +258,12 @@ public:
   /// @param aobj Style updates to apply
   /// @param traces Optional trace indices to target
   auto restyle(const Object &aobj, const Object &traces) const -> bool {
-    auto result =
-        callPlotly("Plotly.restyle", {{"aobj", aobj}, {"traces", traces}});
+    Object params;
+    params["aobj"] = aobj;
+    if (!traces.empty()) {
+      params["traces"] = traces;
+    }
+    auto result = callPlotly("Plotly.restyle", params);
     return result.has_value();
   }
 
@@ -251,15 +271,21 @@ public:
   /// @param traces New trace data to add
   /// @param newIndices Optional indices where to insert the traces
   auto addTraces(const Object &traces, const Object &newIndices) const -> bool {
-    auto result = callPlotly("Plotly.addTraces",
-                             {{"traces", traces}, {"newIndices", newIndices}});
+    Object params;
+    params["traces"] = traces;
+    if (!newIndices.empty()) {
+      params["newIndices"] = newIndices;
+    }
+    auto result = callPlotly("Plotly.addTraces", params);
     return result.has_value();
   }
 
   /// Deletes traces from the plot
   /// @param indices Indices of traces to delete
   auto deleteTraces(const Object &indices) const -> bool {
-    auto result = callPlotly("Plotly.deleteTraces", {{"indices", indices}});
+    Object params;
+    params["indices"] = indices;
+    auto result = callPlotly("Plotly.deleteTraces", params);
     return result.has_value();
   }
 
@@ -268,9 +294,10 @@ public:
   /// @param newIndices New indices for the traces
   auto moveTraces(const Object &currentIndices, const Object &newIndices) const
       -> bool {
-    auto result =
-        callPlotly("Plotly.moveTraces", {{"currentIndices", currentIndices},
-                                         {"newIndices", newIndices}});
+    Object params;
+    params["currentIndices"] = currentIndices;
+    params["newIndices"] = newIndices;
+    auto result = callPlotly("Plotly.moveTraces", params);
     return result.has_value();
   }
 
@@ -280,9 +307,13 @@ public:
   /// @param maxPoints Optional maximum number of points to keep
   auto extendTraces(const Object &update, const Object &indices,
                     const Object &maxPoints) const -> bool {
-    auto result = callPlotly(
-        "Plotly.extendTraces",
-        {{"update", update}, {"indices", indices}, {"maxPoints", maxPoints}});
+    Object params;
+    params["update"] = update;
+    params["indices"] = indices;
+    if (!maxPoints.empty()) {
+      params["maxPoints"] = maxPoints;
+    }
+    auto result = callPlotly("Plotly.extendTraces", params);
     return result.has_value();
   }
 
@@ -291,8 +322,10 @@ public:
   /// @param indices Trace indices to prepend to
   auto prependTraces(const Object &update, const Object &indices) const
       -> bool {
-    auto result = callPlotly("Plotly.prependTraces",
-                             {{"update", update}, {"indices", indices}});
+    Object params;
+    params["update"] = update;
+    params["indices"] = indices;
+    auto result = callPlotly("Plotly.prependTraces", params);
     return result.has_value();
   }
 
@@ -302,23 +335,33 @@ public:
   /// @param config Optional configuration
   auto react(const Object &data, const Object &layout,
              const Object &config) const -> bool {
-    auto result =
-        callPlotly("Plotly.react",
-                   {{"data", data}, {"layout", layout}, {"config", config}});
+    Object params;
+    params["data"] = data;
+    if (!layout.empty()) {
+      params["layout"] = layout;
+    }
+    if (!config.empty()) {
+      params["config"] = config;
+    }
+    auto result = callPlotly("Plotly.react", params);
     return result.has_value();
   }
 
   /// Adds animation frames to the plot
   /// @param frames Frame data to add
   auto addFrames(const Object &frames) const -> bool {
-    auto result = callPlotly("Plotly.addFrames", {{"frames", frames}});
+    Object params;
+    params["frames"] = frames;
+    auto result = callPlotly("Plotly.addFrames", params);
     return result.has_value();
   }
 
   /// Deletes animation frames from the plot
   /// @param frames Frame names or indices to delete
   auto deleteFrames(const Object &frames) const -> bool {
-    auto result = callPlotly("Plotly.deleteFrames", {{"frames", frames}});
+    Object params;
+    params["frames"] = frames;
+    auto result = callPlotly("Plotly.deleteFrames", params);
     return result.has_value();
   }
 
@@ -327,11 +370,12 @@ public:
   /// @param opts Animation options
   auto animate(const Object &frameOrGroupNameOrFrameList,
                const Object &opts) const -> bool {
-    auto result = callPlotly(
-        "Plotly.animate",
-        {{"frameOrGroupNameOrFrameList", frameOrGroupNameOrFrameList},
-         {"opts", opts}},
-        24h);
+    Object params;
+    params["frameOrGroupNameOrFrameList"] = frameOrGroupNameOrFrameList;
+    if (!opts.empty()) {
+      params["opts"] = opts;
+    }
+    auto result = callPlotly("Plotly.animate", params, 24h);
     return result.has_value();
   }
 
